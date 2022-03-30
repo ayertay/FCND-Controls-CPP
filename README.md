@@ -1,3 +1,10 @@
+# Control of a 3D Quadrotor Project #
+In this project, I ported some of control loop logic over to a controller that's written in C++. This code controls a drone in an entirely new simulator which is more bare-bones than the Python / Unity simulator from previous projects, but it's more realistic in the physics that it models.
+
+## Body Rate Controls: ##
+The drone's body rate controls are controlled by a PID controller. The PID controller is implemented in the C++ code. The C++ code is written in a way that it can be used in a real-time simulator.
+
+
 # The C++ Project Readme #
 
 This is the readme for the C++ project.
