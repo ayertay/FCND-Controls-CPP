@@ -17,6 +17,7 @@ with open('FigureEight.txt', 'w') as the_file:
     px = 0;
     py = 0;
     pz = 0;
+    psi = 0;
     while t <= maxtime:
         x = math.sin(t * 2 * math.pi / period[0] + phase[0]) * radius * amp[0] + center[0];
         y = math.sin(t * 2 * math.pi / period[1] + phase[1]) * radius * amp[1] + center[1];
@@ -26,9 +27,17 @@ with open('FigureEight.txt', 'w') as the_file:
 		vy = 0;
 		vz = 0;
 		######## BEGIN STUDENT CODE
+		the_file.write("," + fmt((x-px)/timestep) + "," + fmt((y-py)/timestep) + "," + fmt((z-pz)/timestep));
+
+        if (x-px > 1e-6) and (y-py > 1e-6):
+            psi_now = math.atan2((y-py), (x-px));
 		
+        px = x;
+        py = y;
+        pz = z;
+        
 		######## END STUDENT CODE
-		the_file.write("," + fmt(vx) + "," + fmt(vy) + "," + fmt(vz));
+		#the_file.write("," + fmt(vx) + "," + fmt(vy) + "," + fmt(vz));
 		######## EXAMPLE SOLUTION
         #the_file.write("," + fmt((x-px)/timestep) + "," + fmt((y-py)/timestep) + "," + fmt((z-pz)/timestep));
 		#px = x;
