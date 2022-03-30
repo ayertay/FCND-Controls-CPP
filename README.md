@@ -4,7 +4,7 @@ In this project, I ported some of control loop logic over to a controller that's
 ## Body Rate and Roll/Pitch Controls: ##
 First I write the GenerateMotorCommands() function which takes in the current state of the drone and outputs the desired motor commands. Following is the mapping of the desired collective thrust and desired rotation moment about each axis to the motor commands:
 <p align="center">
-<img src="animations/forces.JPG" width="300"/>
+<img src="animations/Forces.JPG" width="300"/>
 </p>
 
 In the code, F3 and F4 motors are swapped to match the orientation of the drone.
@@ -23,7 +23,7 @@ Roll and pitch controls are computed using the following equations:
 and 
 
 <p align="center">
-<img src="animations/Roll_pitch_B.JPG" width="250"/>
+<img src="animations/Roll_Pitch_B.JPG" width="250"/>
 </p>
 
 ## Position/velocity and yaw angle control ##
