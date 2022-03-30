@@ -13,7 +13,7 @@
 using SLR::Quaternion;
 using SLR::ToUpper;
 
-void KeyboardInteraction(V3F& force, shared_ptr<Visualizer_GLUT> vis);
+void KeyboardInteraction(V3F &force, shared_ptr<Visualizer_GLUT> vis);
 bool receivedResetRequest = true;
 bool paused = false;
 void PrintHelpText();
@@ -31,13 +31,13 @@ const int NUM_SIM_STEPS_PER_TIMER = 5;
 Timer lastDraw;
 V3F force, moment;
 
-float simulationTime=0;
-int randomNumCarry=-1;
+float simulationTime = 0;
+int randomNumCarry = -1;
 
 void OnTimer(int v);
 
 vector<QuadcopterHandle> CreateVehicles();
-string _scenarioFile="../config/1_Intro.txt";
+string _scenarioFile = "../config/1_Intro.txt";
 
 #include "MavlinkNode/MavlinkNode.h"
 shared_ptr<MavlinkNode> mlNode;
@@ -45,7 +45,7 @@ shared_ptr<MavlinkNode> mlNode;
 int main(int argcp, char **argv)
 {
   PrintHelpText();
- 
+
   // load parameters
   ParamsHandle config = SimpleConfig::GetInstance();
 
@@ -57,16 +57,17 @@ int main(int argcp, char **argv)
   FILE *f = fopen("../config/LastScenario.txt", "r");
   if (f)
   {
-    char buf[100]; buf[99] = 0;
+    char buf[100];
+    buf[99] = 0;
     fgets(buf, 99, f);
     _scenarioFile = SLR::Trim(buf);
     fclose(f);
   }
 
   LoadScenario(_scenarioFile);
- 
-  glutTimerFunc(1,&OnTimer,0);
-  
+
+  glutTimerFunc(1, &OnTimer, 0);
+
   glutMainLoop();
 
   return 0;
@@ -74,8 +75,8 @@ int main(int argcp, char **argv)
 
 void LoadScenario(string scenarioFile)
 {
-  FILE *f = fopen("../config/LastScenario.txt","w");
-  if(f)
+  FILE *f = fopen("../config/LastScenario.txt", "w");
+  if (f)
   {
     fprintf(f, "%s", scenarioFile.c_str());
     fclose(f);
@@ -102,8 +103,8 @@ void LoadScenario(string scenarioFile)
   ProcessConfigCommands(visualizer);
 
   mlNode.reset();
-  if(config->Get("Mavlink.Enable",0)!=0)
-  { 
+  if (config->Get("Mavlink.Enable", 0) != 0)
+  {
     mlNode.reset(new MavlinkNode());
   }
 
@@ -125,8 +126,8 @@ void ResetSimulation()
   simulationTime = 0;
   config->Reset(_scenarioFile);
   dtSim = config->Get("Sim.Timestep", 0.005f);
-  
-  for (unsigned i = 0; i<quads.size(); i++)
+
+  for (unsigned i = 0; i < quads.size(); i++)
   {
     quads[i]->Reset();
   }
@@ -136,17 +137,17 @@ void ResetSimulation()
 void OnTimer(int)
 {
   ParamsHandle config = SimpleConfig::GetInstance();
-  
+
   // logic to reset the simulation based on key input or reset conditions
-  float endTime = config->Get("Sim.EndTime",-1.f);
-  if(receivedResetRequest ==true ||
-     (ToUpper(config->Get("Sim.RunMode", "Continuous"))=="REPEAT" && endTime>0 && simulationTime >= endTime))
+  float endTime = config->Get("Sim.EndTime", -1.f);
+  if (receivedResetRequest == true ||
+      (ToUpper(config->Get("Sim.RunMode", "Continuous")) == "REPEAT" && endTime > 0 && simulationTime >= endTime))
   {
     ResetSimulation();
   }
-  
+
   visualizer->OnMainTimer();
-  
+
   // main loop
   if (!paused)
   {
@@ -160,9 +161,9 @@ void OnTimer(int)
     }
     grapher->UpdateData(simulationTime);
   }
-  
+
   KeyboardInteraction(force, visualizer);
-  
+
   if (lastDraw.ElapsedSeconds() > 0.030)
   {
     if (quads.size() > 0)
@@ -181,10 +182,9 @@ void OnTimer(int)
       mlNode->Send(MakeMavlinkPacket_LocalPose(simulationTime, quads[0]->Position(), quads[0]->Velocity()));
       mlNode->Send(MakeMavlinkPacket_Attitude(simulationTime, quads[0]->Attitude(), quads[0]->Omega()));
     }
-    
   }
-  
-  glutTimerFunc(5,&OnTimer,0);
+
+  glutTimerFunc(5, &OnTimer, 0);
 }
 
 vector<QuadcopterHandle> CreateVehicles()
@@ -204,16 +204,15 @@ vector<QuadcopterHandle> CreateVehicles()
       ret.push_back(q);
     }
     else
-    {		
+    {
       break;
     }
     i++;
   }
   return ret;
-
 }
 
-void KeyboardInteraction(V3F& force, shared_ptr<Visualizer_GLUT> visualizer)
+void KeyboardInteraction(V3F &force, shared_ptr<Visualizer_GLUT> visualizer)
 {
   bool keyPressed = false;
   const float forceStep = 0.04f;
@@ -295,7 +294,8 @@ void ProcessConfigCommands(shared_ptr<Visualizer_GLUT> vis)
     char buf[100];
     sprintf_s(buf, 100, "Commands.%d", i);
     string cmd = config->Get(buf, "");
-    if (cmd == "") break;
+    if (cmd == "")
+      break;
     vis->OnMenu(cmd);
     i++;
   }
