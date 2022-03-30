@@ -1,9 +1,56 @@
 # Control of a 3D Quadrotor Project #
 In this project, I ported some of control loop logic over to a controller that's written in C++. This code controls a drone in an entirely new simulator which is more bare-bones than the Python / Unity simulator from previous projects, but it's more realistic in the physics that it models.
 
-## Body Rate Controls: ##
-The drone's body rate controls are controlled by a PID controller. The PID controller is implemented in the C++ code. The C++ code is written in a way that it can be used in a real-time simulator.
+## Body Rate and Roll/Pitch Controls: ##
+First I write the GenerateMotorCommands() function which takes in the current state of the drone and outputs the desired motor commands. Following is the mapping of the desired collective thrust and desired rotation moment about each axis to the motor commands:
+<p align="center">
+<img src="animations/forces.jpg" width="300"/>
+</p>
 
+In the code, F3 and F4 motors are swapped to match the orientation of the drone.
+
+BodyRateControl() code is shown below:
+```
+V3F I = V3F(Ixx, Iyy, Izz);
+momentCmd = I * kpPQR * (pqrCmd - pqr);
+```
+
+Roll and pitch controls are computed using the following equations:
+<p align="center">
+<img src="animations/Roll_pitch.jpg" width="400"/>
+</p>
+
+and 
+
+<p align="center">
+<img src="animations/Roll_pitch_B.jpg" width="250"/>
+</p>
+
+## Position/velocity and yaw angle control ##
+
+Next in the task was to implement LateralPositionControl() which uses the PD controller to control acceleration in the lateral direction and has the following equations:
+<p align="center">
+<img src="animations/lateral.jpg" width="400"/>
+</p>
+
+AltitudeControl() outputs the collective thrust and has PD controller to control altitude and has the following equations:
+<p align="center">
+<img src="animations/Altitude.jpg" width="350"/>
+</p>
+
+YawControl() outputs the desired yaw angle and has P controller to control yaw angle and has the following equations:
+<p align="center">
+<img src="animations/Yaw.jpg" width="200"/>
+</p>
+
+## Tuning ##
+Mass was adjusted to 0.5 kg.
+
+First kpPQR were tuned by running the simulation for a few seconds and adjusting the values until the drone was hovering.
+
+Then kpBank was tuned until Scenario 2 passed.
+
+After that, kpVelXY and kpVelZ were adjusted according to the suggestion to be at least `~` 3-4 times greater than the respective position gain (kpPosXY and kpPosZ), but later kpPosXY was adjusted to be `~` 3 times greater than kpVelXY.
 
 # The C++ Project Readme #
 
