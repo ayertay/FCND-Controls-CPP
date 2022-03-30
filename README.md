@@ -4,7 +4,7 @@ In this project, I ported some of control loop logic over to a controller that's
 ## Body Rate and Roll/Pitch Controls: ##
 First I write the GenerateMotorCommands() function which takes in the current state of the drone and outputs the desired motor commands. Following is the mapping of the desired collective thrust and desired rotation moment about each axis to the motor commands:
 <p align="center">
-<img src="animations/forces.jpg" width="300"/>
+<img src="animations/forces.JPG" width="300"/>
 </p>
 
 In the code, F3 and F4 motors are swapped to match the orientation of the drone.
@@ -17,30 +17,30 @@ momentCmd = I * kpPQR * (pqrCmd - pqr);
 
 Roll and pitch controls are computed using the following equations:
 <p align="center">
-<img src="animations/Roll_pitch.jpg" width="400"/>
+<img src="animations/Roll_pitch.JPG" width="400"/>
 </p>
 
 and 
 
 <p align="center">
-<img src="animations/Roll_pitch_B.jpg" width="250"/>
+<img src="animations/Roll_pitch_B.JPG" width="250"/>
 </p>
 
 ## Position/velocity and yaw angle control ##
 
 Next in the task was to implement LateralPositionControl() which uses the PD controller to control acceleration in the lateral direction and has the following equations:
 <p align="center">
-<img src="animations/lateral.jpg" width="400"/>
+<img src="animations/lateral.JPG" width="400"/>
 </p>
 
 AltitudeControl() outputs the collective thrust and has PD controller to control altitude and has the following equations:
 <p align="center">
-<img src="animations/Altitude.jpg" width="350"/>
+<img src="animations/Altitude.JPG" width="350"/>
 </p>
 
 YawControl() outputs the desired yaw angle and has P controller to control yaw angle and has the following equations:
 <p align="center">
-<img src="animations/Yaw.jpg" width="200"/>
+<img src="animations/Yaw.JPG" width="200"/>
 </p>
 
 ## Tuning ##
